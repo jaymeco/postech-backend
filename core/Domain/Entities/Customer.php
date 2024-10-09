@@ -4,6 +4,8 @@ namespace Core\Domain\Entities;
 
 use Core\Domain\ValueObjects\Cpf;
 use Core\Domain\ValueObjects\CustomerType;
+use Core\Domain\ValueObjects\Email;
+use Core\Domain\ValueObjects\Name;
 use Core\Domain\ValueObjects\Uuid;
 
 class Customer
@@ -11,14 +13,15 @@ class Customer
     private function __construct(
         private Uuid $uuid,
         private CustomerType $type,
-        private ?Uuid $userUuid =  null,
         private ?Cpf $cpf = null,
+        private ?Name $name = null,
+        private ?Email $email = null,
     ) {}
 
-    public static function create(?string $cpf = null, ?string $userUuid = null)
+    public static function create(?string $cpf = null, ?string $name = null, ?string $email = null)
     {
         $type = CustomerType::guest();
-        if (!is_null($userUuid)) {
+        if (!is_null($name) && !is_null($email)) {
             $type = CustomerType::registered();
         }
 
@@ -26,15 +29,20 @@ class Customer
             $cpf = Cpf::create($cpf);
         }
 
-        if (!is_null($userUuid)) {
-            $userUuid = Uuid::create($userUuid);
+        if (!is_null($name)) {
+            $name = Name::create($name);
+        }
+
+        if (!is_null($email)) {
+            $email = Email::create($email);
         }
 
         return new static(
             Uuid::create(),
             $type,
-            $userUuid,
-            $cpf
+            $cpf,
+            $name,
+            $email
         );
     }
 
@@ -48,9 +56,14 @@ class Customer
         return $this->uuid;
     }
 
-    public function getUserUuid()
+    public function getName()
     {
-        return $this->userUuid;
+        return $this->name;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     public function getCpf()
