@@ -7,4 +7,6 @@ use Core\Domain\Entities\Product;
 interface ProductRepository
 {
     public function getByUuid(string $uuid): Product;
+
+    public function save(Product $product): void;
 }
