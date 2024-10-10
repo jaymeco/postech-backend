@@ -20,6 +20,14 @@ class Category
         );
     }
 
+    public static function restore(string $uuid, string $name)
+    {
+        return new static(
+            Uuid::create($uuid),
+            Name::create($name)
+        );
+    }
+
     public function getUuid()
     {
         return $this->uuid;
