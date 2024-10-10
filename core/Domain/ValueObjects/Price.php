@@ -8,4 +8,9 @@ class Price extends ValueObject
     {
         return new static($price);
     }
+
+    public function sum(float $value)
+    {
+        $this->value += $value;
+    }
 }
