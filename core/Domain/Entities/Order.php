@@ -4,17 +4,22 @@ namespace Core\Domain\Entities;
 
 use Core\Domain\Base\Enums\OrderStatusEnum;
 use Core\Domain\ValueObjects\OrderCode;
+use Core\Domain\ValueObjects\Price;
 use Core\Domain\ValueObjects\Uuid;
 use DateTimeInterface;
 
 class Order
 {
+    /*** @var Product[] */
+    private array $products = [];
+
     private function __construct(
         private Uuid $uuid,
         private Uuid $customerUuid,
         private OrderStatus $status,
         private OrderCode $code,
-        private DateTimeInterface $orderedAt
+        private DateTimeInterface $orderedAt,
+        private Price $price,
     ) {}
 
     public static function create(string $customerUuid)
@@ -28,6 +33,7 @@ class Order
             $status,
             OrderCode::generate(),
             now(),
+            Price::create(0)
         );
     }
 
@@ -54,5 +60,12 @@ class Order
     public function getOrderedAt()
     {
         return $this->orderedAt;
+    }
+
+    public function addProduct(Product $product)
+    {
+        $this->products[] = $product;
+
+        $this->price->sum($product->getPrice()->getValue());
     }
 }
