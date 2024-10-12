@@ -68,4 +68,9 @@ class Order
 
         $this->price->sum($product->getPrice()->getValue());
     }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
 }
