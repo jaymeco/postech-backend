@@ -13,4 +13,6 @@ interface ProductRepository
     public function update(Product $product): void;
 
     public function delete(Product $product): void;
+
+    public function all(?string $categoryUuid = null): array;
 }
