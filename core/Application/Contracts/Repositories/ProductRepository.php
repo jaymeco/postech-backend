@@ -9,4 +9,6 @@ interface ProductRepository
     public function getByUuid(string $uuid): Product;
 
     public function save(Product $product): void;
+
+    public function update(Product $product): void;
 }
