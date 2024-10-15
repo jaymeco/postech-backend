@@ -50,4 +50,11 @@ class ProductService
 
         $this->productRepository->update($updatedProduct);
     }
+
+    public function delete(string $uuid)
+    {
+        $product = $this->productRepository->getByUuid($uuid);
+
+        $this->productRepository->delete($product);
+    }
 }
