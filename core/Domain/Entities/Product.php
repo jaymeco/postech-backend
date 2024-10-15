@@ -29,6 +29,18 @@ class Product
         );
     }
 
+    public static function restore(string $uuid, string $name, string $description, Category $category, string $imageUri, float $price)
+    {
+        return new static(
+            Uuid::create($uuid),
+            Name::create($name),
+            $description,
+            $category,
+            $imageUri,
+            Price::create($price),
+        );
+    }
+
     public function getUuid()
     {
         return $this->uuid;
