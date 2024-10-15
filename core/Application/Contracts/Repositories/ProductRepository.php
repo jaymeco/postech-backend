@@ -11,4 +11,6 @@ interface ProductRepository
     public function save(Product $product): void;
 
     public function update(Product $product): void;
+
+    public function delete(Product $product): void;
 }
