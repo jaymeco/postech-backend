@@ -57,4 +57,11 @@ class ProductService
 
         $this->productRepository->delete($product);
     }
+
+    public function getAll(?string $categoryUuid)
+    {
+        $products = $this->productRepository->all($categoryUuid);
+
+        return $products;
+    }
 }
