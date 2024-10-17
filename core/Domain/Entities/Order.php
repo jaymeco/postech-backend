@@ -73,4 +73,13 @@ class Order
     {
         return $this->price;
     }
+
+    public function defineReady()
+    {
+        $enum = OrderStatusEnum::READY;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
 }
