@@ -12,4 +12,13 @@ abstract class ValueObject
     {
         return $this->value;
     }
+
+    public function equals($object): bool
+    {
+        if ($object instanceof ValueObject) {
+            return $this->getValue() == $object->getValue();
+        }
+
+        return $this->getValue() == $object;
+    }
 }
