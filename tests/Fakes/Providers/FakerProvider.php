@@ -18,4 +18,14 @@ class FakerProvider extends \Faker\Provider\Base
     {
         return $this->generator->sentence($nbWords);
     }
+
+    public function cpf()
+    {
+        $cpf = "";
+        for ($i = 0; $i <= 10; $i++) {
+            $cpf .= $this->generator->randomNumber(1);
+        }
+
+        return $cpf;
+    }
 }
