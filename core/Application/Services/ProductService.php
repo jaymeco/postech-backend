@@ -25,6 +25,11 @@ class ProductService
         return $product;
     }
 
+    public function getByUuid(string $uuid)
+    {
+        return $this->productRepository->getByUuid($uuid);
+    }
+
     public function update(
         string $productUuid,
         ?string $name = null,
