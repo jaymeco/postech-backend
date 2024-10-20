@@ -58,4 +58,33 @@ class ProductServiceTest extends TestCase
         $this->assertEquals($fake->imageUri, $product->getImageUri());
         $this->assertEquals($price, $product->getPrice()->getValue());
     }
+
+    private function createProduct(ProductService $service, ?string $category = null)
+    {
+        $fake = new ProductFaker();
+
+        return $service->create(
+            $fake->name,
+            $fake->description,
+            $category ?? CategoryEnum::SNACK->key(),
+            $fake->imageUri,
+            $fake->price
+        );
+    }
+
+    public function test_should_list_all_product()
+    {
+        $service = new ProductService(new ProductMemoryRepository(), new CategoryMemoryRepository());
+
+        $initialList = $service->getAll();
+
+        $this->createProduct($service);
+        $this->createProduct($service);
+        $this->createProduct($service);
+
+        $finalList = $service->getAll();
+
+        $this->assertCount(0, $initialList);
+        $this->assertCount(3, $finalList);
+    }
 }
