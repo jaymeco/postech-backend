@@ -32,7 +32,7 @@ class ProductMemoryRepository implements ProductRepository
             throw new Error('Not found');
         }
 
-        return $founds[0];
+        return $founds[array_key_first($founds)];
     }
 
     public function update(Product $product): void
