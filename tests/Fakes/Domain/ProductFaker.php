@@ -2,13 +2,10 @@
 
 namespace Tests\Fakes\Domain;
 
-use Illuminate\Foundation\Testing\WithFaker;
+use Tests\Fakes\Providers\FakerProvider;
 
 class ProductFaker
 {
-    use WithFaker;
-
-
     public string $name;
     public string $description;
     public string $imageUri;
@@ -16,11 +13,12 @@ class ProductFaker
 
     public function __construct()
     {
-        $this->setUpFaker();
+        $faker = \Faker\Factory::create();
+        $faker->addProvider(new FakerProvider($faker));
 
-        $this->name = $this->faker->name();
-        $this->description = $this->faker->text();
-        $this->imageUri = $this->faker->imageUrl();
-        $this->price = $this->faker->randomNumber(2);
+        $this->name = $faker->word();
+        $this->description = $faker->sentence();
+        $this->price = $faker->number(2);
+        $this->imageUri = 'http://example.com/image.png';
     }
 }
