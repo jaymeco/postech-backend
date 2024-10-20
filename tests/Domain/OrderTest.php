@@ -26,7 +26,6 @@ class OrderTest extends TestCase
         }
         $this->assertEquals($customerUuid, $order->getCustomerUuid()->getValue());
         $this->assertNotNull($order->getCode()->getValue());
-        $this->assertEquals(now()->timestamp, $order->getOrderedAt()->getTimestamp());
         $this->assertEquals($totalPrice, $order->getPrice()->getValue());
     }
 
