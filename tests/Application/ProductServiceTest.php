@@ -87,4 +87,24 @@ class ProductServiceTest extends TestCase
         $this->assertCount(0, $initialList);
         $this->assertCount(3, $finalList);
     }
+
+    public function test_should_list_all_products_by_category()
+    {
+        $service = new ProductService(new ProductMemoryRepository(), new CategoryMemoryRepository());
+
+
+        $this->createProduct($service);
+        $this->createProduct($service);
+        $this->createProduct($service);
+        $this->createProduct($service);
+        $this->createProduct($service, CategoryEnum::DRINK->key());
+
+        $initialList = $service->getAll();
+        $finalList = $service->getAll(CategoryEnum::DRINK->key());
+        $product = $finalList[array_key_first($finalList)];
+
+        $this->assertCount(5, $initialList);
+        $this->assertCount(1, $finalList);
+        $this->assertTrue($product->getCategory()->getUuid()->equals(CategoryEnum::DRINK->key()));
+    }
 }
