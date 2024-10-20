@@ -6,6 +6,7 @@ use App\Infra\Repositories\Memory\CategoryMemoryRepository;
 use App\Infra\Repositories\Memory\ProductMemoryRepository;
 use Core\Application\Services\ProductService;
 use Core\Domain\Base\Enums\CategoryEnum;
+use Error;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\Domain\ProductFaker;
 
@@ -92,7 +93,6 @@ class ProductServiceTest extends TestCase
     {
         $service = new ProductService(new ProductMemoryRepository(), new CategoryMemoryRepository());
 
-
         $this->createProduct($service);
         $this->createProduct($service);
         $this->createProduct($service);
@@ -106,5 +106,24 @@ class ProductServiceTest extends TestCase
         $this->assertCount(5, $initialList);
         $this->assertCount(1, $finalList);
         $this->assertTrue($product->getCategory()->getUuid()->equals(CategoryEnum::DRINK->key()));
+    }
+
+    public function test_should_delete_product()
+    {
+        $service = new ProductService(new ProductMemoryRepository(), new CategoryMemoryRepository());
+
+        $this->createProduct($service);
+        $this->createProduct($service);
+        $product = $this->createProduct($service);
+        $this->createProduct($service);
+        $initList = $service->getAll();
+
+        $service->delete($product->getUuid()->getValue());
+        $finalList = $service->getAll();
+
+        $this->assertCount(4, $initList);
+        $this->assertCount(3, $finalList);
+        $this->expectException(Error::class);
+        $service->getByUuid($product->getUuid()->getValue());
     }
 }
