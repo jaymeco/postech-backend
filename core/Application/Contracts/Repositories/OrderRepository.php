@@ -11,4 +11,6 @@ interface OrderRepository
     public function getByUuid(string $uuid): Order;
 
     public function update(Order $order): void;
+
+    public function all(): array;
 }
