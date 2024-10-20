@@ -7,4 +7,6 @@ use Core\Domain\Entities\Customer;
 interface CustomerRepository
 {
     public function save(Customer $customer): void;
+
+    public function getByUuid(string $uuid): Customer;
 }
