@@ -1,0 +1,38 @@
+<?php
+
+namespace Tests\Application;
+
+use App\Infra\Repositories\Memory\CategoryMemoryRepository;
+use App\Infra\Repositories\Memory\ProductMemoryRepository;
+use Core\Application\Services\ProductService;
+use Core\Domain\Base\Enums\CategoryEnum;
+use Core\Domain\Entities\Category;
+use Core\Domain\Entities\Product;
+use PHPUnit\Framework\TestCase;
+use Tests\Fakes\Domain\ProductFaker;
+
+class ProductServiceTest extends TestCase
+{
+    public function test_should_create_product()
+    {
+        $service = new ProductService(new ProductMemoryRepository(), new CategoryMemoryRepository());
+        $fake = new ProductFaker();
+
+        $created = $service->create(
+            $fake->name,
+            $fake->description,
+            CategoryEnum::SNACK->key(),
+            $fake->imageUri,
+            $fake->price
+        );
+
+        $product = $service->getByUuid($created->getUuid()->getValue());
+
+        $this->assertEquals($fake->name, $product->getName()->getValue());
+        $this->assertEquals($fake->description, $product->getDescription());
+        $this->assertEquals(CategoryEnum::SNACK->key(), $product->getCategory()->getUuid()->getValue());
+        $this->assertEquals($fake->imageUri, $product->getImageUri());
+        $this->assertEquals($fake->price, $product->getPrice()->getValue());
+
+    }
+}
