@@ -11,10 +11,12 @@ class CreateCustomerUseCase
         private CustomerRepository $customerRepository,
     ) {}
 
-    public function execute(string $email, string $name)
+    public function execute(string $email, string $name): Customer
     {
         $customer = Customer::create(null, $name, $email);
 
         $this->customerRepository->save($customer);
+
+        return $customer;
     }
 }
