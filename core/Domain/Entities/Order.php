@@ -74,6 +74,11 @@ class Order
         return $this->price;
     }
 
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
     public function defineReady()
     {
         $enum = OrderStatusEnum::READY;
