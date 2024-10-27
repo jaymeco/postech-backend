@@ -13,7 +13,6 @@ class ExceptionRender
         public readonly string $message,
         private readonly int $status,
         public readonly array $details,
-        public readonly ?\Throwable $previous = null,
     ) {}
 
     public static function render(Throwable $exception)
@@ -26,8 +25,7 @@ class ExceptionRender
         return response()->json($renderer, $renderer->status);
     }
 
-    public function getData() {
-    }
+    public function getData() {}
 
     private static function request(RequestException $exception)
     {
@@ -42,11 +40,25 @@ class ExceptionRender
     private static function unResolved(Throwable $exception)
     {
         return new static(
-            ErrorTypes::validation()->type,
-            ErrorTypes::validation()->message,
+            ErrorTypes::unexpected()->type,
+            ErrorTypes::unexpected()->message,
             HttpStatus::INTERNAL_SERVER_ERROR,
-            [],
-            $exception->getPrevious()
+            self::buildPrevious($exception),
         );
+    }
+
+    private static function buildPrevious(Throwable $exception)
+    {
+        $details = [
+            'error' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+        ];
+
+        if (!is_null($exception->getPrevious())) {
+            $details['previous'] = self::buildPrevious($exception->getPrevious());
+        }
+
+        return $details;
     }
 }
