@@ -1,0 +1,47 @@
+post:
+  tags:
+    - customers
+  summary: Cadastro de cliente.
+  description: Realiza cadastro de cliente.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: John Doe
+            email:
+              type: string
+              example: john.doe@mail.com
+          required:
+            - name
+            - email
+  responses:
+    "201":
+      description: Cliente cadastrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+              cpf:
+                type: string
+              type:
+                type: string
+            example:
+              uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+              name: John Doe
+              type: REGISTERED
+              email: john.doe@mail.com
+              cpf: null
+    "400":
+      $ref: '../base-doc.yaml#/components/responses/BadRequest'

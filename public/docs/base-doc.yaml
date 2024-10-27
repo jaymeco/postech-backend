@@ -1,0 +1,26 @@
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                example: ValidationError
+              message:
+                type: string
+                example: Dados invalidos
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                      example: email
+                    rule:
+                      type: string
+                      example: required
