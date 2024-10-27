@@ -19,6 +19,7 @@ class ExceptionRender
     {
         $renderer =  match ($exception::class) {
             RequestException::class => self::request($exception),
+            ApplicationException::class => self::application($exception),
             default => self::unResolved($exception),
         };
 
@@ -33,6 +34,16 @@ class ExceptionRender
             ErrorTypes::validation()->type,
             ErrorTypes::validation()->message,
             HttpStatus::BAD_REQUEST,
+            $exception->getDetails(),
+        );
+    }
+
+    private static function application(ApplicationException $exception)
+    {
+        return new static(
+            $exception->getType(),
+            $exception->getMessage(),
+            HttpStatus::NOT_FOUND,
             $exception->getDetails(),
         );
     }
