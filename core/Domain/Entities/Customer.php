@@ -46,6 +46,33 @@ class Customer
         );
     }
 
+    public static function restore(string $uuid, string $type, ?string $cpf = null, ?string $name = null, ?string $email = null)
+    {
+        if (!is_null($name) && !is_null($email)) {
+            $type = CustomerType::registered();
+        }
+
+        if (!is_null($cpf)) {
+            $cpf = Cpf::create($cpf);
+        }
+
+        if (!is_null($name)) {
+            $name = Name::create($name);
+        }
+
+        if (!is_null($email)) {
+            $email = Email::create($email);
+        }
+
+        return new static(
+            Uuid::create($uuid),
+            CustomerType::restore($type),
+            $cpf,
+            $name,
+            $email
+        );
+    }
+
     public function getType()
     {
         return $this->type;
