@@ -11,7 +11,7 @@ class ApplicationException extends Exception
 
     private function __construct(
         private string $type,
-        private string $message,
+        private string $exceptionMessage,
     ) {
         $this->details = [];
     }
