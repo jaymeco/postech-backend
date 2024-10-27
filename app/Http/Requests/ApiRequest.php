@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\ValidationRules;
 use App\Exceptions\RequestException;
 use Error;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -18,8 +20,16 @@ abstract class ApiRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'required' => ValidationRules::REQUIRED,
+            'type' => ValidationRules::TYPE,
+        ];
+    }
+
     public function failedValidation(Validator $validator)
     {
-        throw RequestException::mount($validator);
+        throw RequestException::create($validator);
     }
 }
