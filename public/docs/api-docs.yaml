@@ -19,5 +19,7 @@ paths:
 
   /establishment/products:
     $ref: 'establishment/product.yaml'
-  /establishment/products/{productUuid}:
+  /establishment/products/{productuuid}:
     $ref: 'establishment/product/update.yaml'
+  /establishment/categories/{categoryUuid}/products:
+    $ref: 'establishment/product/all-by-category.yaml'
