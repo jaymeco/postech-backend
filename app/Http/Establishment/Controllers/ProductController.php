@@ -47,4 +47,11 @@ class ProductController extends Controller
 
         return response()->json($products, 200);
     }
+
+    public function delete(string $uuid)
+    {
+        $this->service->delete($uuid);
+
+        return response()->json([], 204);
+    }
 }
