@@ -40,4 +40,11 @@ class ProductController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function getAllByCategory(string $categoryUuid)
+    {
+        $products = $this->service->getAll($categoryUuid);
+
+        return response()->json($products, 200);
+    }
 }
