@@ -24,3 +24,28 @@ components:
                     rule:
                       type: string
                       example: required
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                example: ApplicationException.NotFound
+              message:
+                type: string
+                example: Recurso solicitado nao encontrado
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resoruce:
+                      type: string
+                      example: category
+                    field:
+                      type: string
+                      example: uuid
+

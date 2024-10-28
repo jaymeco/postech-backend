@@ -1,0 +1,67 @@
+post:
+  tags:
+    - products
+  summary: Cadastro de produto.
+  description: Realiza cadastro de produto.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+            category_uuid:
+              type: string
+            description:
+              type: string
+            image_uri:
+              type: string
+            price:
+              type: integer
+          required:
+            - name
+            - category_uuid
+            - description
+            - image_uri
+            - price
+          example:
+            name: Misto Quente
+            category_uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+            description: Misto da melhor qualidade
+            image_uri: https://imageplaceholder.net/600x400
+            price: 12.5
+  responses:
+    "201":
+      description: Produto cadastrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+              name:
+                type: string
+              category:
+                type: object
+              description:
+                type: string
+              image_uri:
+                type: string
+              price:
+                type: integer
+            example:
+              uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+              name: Misto Quente
+              description: Misto da melhor qualidade
+              category:
+                uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+                name: Lanche
+              image_uri: https://imageplaceholder.net/600x400
+              price: 12.5
+    "400":
+      $ref: '../base-doc.yaml#/components/responses/BadRequest'
+    "404":
+      $ref: '../base-doc.yaml#/components/responses/NotFound'

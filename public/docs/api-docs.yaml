@@ -10,7 +10,12 @@ servers:
 tags:
   - name: customers
     description: "[Customers] Rotas da api de cliente"
+  - name: products
+    description: "[Products] Rotas para o recurso de produto"
 
 paths:
   /customers:
     $ref: 'customer/doc.yaml'
+
+  /establishment/products:
+    $ref: 'establishment/product.yaml'
