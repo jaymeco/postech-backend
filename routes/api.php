@@ -10,6 +10,11 @@ Route::prefix('customer')->group(function () {
 });
 
 Route::prefix('establishment')->group(function () {
+    Route::prefix('categories')->group(function () {
+        Route::prefix('{categoryUuid}')->group(function () {
+            Route::get('/products', [ProductController::class, 'getAllByCategory']);
+        });
+    });
     Route::prefix('products')->group(function () {
         Route::post('/', [ProductController::class, 'create']);
         Route::prefix('{productUuid}')->group(function () {
