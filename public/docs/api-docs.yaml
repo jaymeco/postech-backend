@@ -19,3 +19,5 @@ paths:
 
   /establishment/products:
     $ref: 'establishment/product.yaml'
+  /establishment/products/{productUuid}:
+    $ref: 'establishment/product/update.yaml'
