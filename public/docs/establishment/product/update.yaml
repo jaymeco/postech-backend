@@ -35,3 +35,20 @@ put:
       $ref: '../../base-doc.yaml#/components/responses/BadRequest'
     "404":
       $ref: '../../base-doc.yaml#/components/responses/NotFound'
+delete:
+  tags:
+    - products
+  summary: Deletar produto.
+  description: Realiza a exclusao de um produto.
+  parameters:
+    - in: path
+      name: productUuid
+      schema:
+        type: string
+      required: true
+      description: Uuid do produto
+  responses:
+    "204":
+      description: Not Content
+    "404":
+      $ref: '../../base-doc.yaml#/components/responses/NotFound'
