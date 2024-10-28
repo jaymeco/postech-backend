@@ -4,6 +4,7 @@ namespace App\Http\Establishment\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Establishment\Requests\CreateProductRequest;
+use App\Http\Establishment\Requests\UpdateProductRequest;
 use Core\Application\Services\ProductService;
 use Core\Application\UseCases\CreateCustomerUseCase;
 
@@ -24,5 +25,19 @@ class ProductController extends Controller
         );
 
         return response()->json($product, 201);
+    }
+
+    public function update(string $uuid, UpdateProductRequest $request)
+    {
+        $this->service->update(
+            $uuid,
+            $request->getName(),
+            $request->getDescription(),
+            $request->getCategoryUuid(),
+            $request->getImageUri(),
+            $request->getPrice(),
+        );
+
+        return response()->json([], 200);
     }
 }
