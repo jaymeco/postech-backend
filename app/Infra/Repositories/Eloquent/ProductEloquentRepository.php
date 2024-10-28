@@ -65,7 +65,7 @@ class ProductEloquentRepository extends EloquentRepository implements ProductRep
 
     public function getByUuid(string $uuid): Product
     {
-        $model = $this->query->where(Model::UUID, value: $uuid)->first();
+        $model = $this->query->where(Model::UUID, '=',$uuid)->first();
 
         throw_if(is_null($model), ApplicationException::notFound('product', 'uuid'));
 
