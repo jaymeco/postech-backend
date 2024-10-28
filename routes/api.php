@@ -19,6 +19,7 @@ Route::prefix('establishment')->group(function () {
         Route::post('/', [ProductController::class, 'create']);
         Route::prefix('{productUuid}')->group(function () {
             Route::put('/', [ProductController::class, 'update']);
+            Route::delete('/', [ProductController::class, 'delete']);
         });
     });
 });
