@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Establishment\Requests;
+namespace App\Http\Customer\Requests;
 
 use App\Http\Requests\ApiRequest;
 
