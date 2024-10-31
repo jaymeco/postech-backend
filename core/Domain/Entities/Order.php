@@ -2,6 +2,7 @@
 
 namespace Core\Domain\Entities;
 
+use Carbon\Carbon;
 use Core\Domain\Base\Enums\OrderStatusEnum;
 use Core\Domain\ValueObjects\OrderCode;
 use Core\Domain\ValueObjects\Price;
@@ -34,6 +35,24 @@ class Order
             OrderCode::generate(),
             now(),
             Price::create(0)
+        );
+    }
+
+    public static function restore(
+        string $uuid,
+        string $customerUuid,
+        string $code,
+        OrderStatus $status,
+        string $orderedAt,
+        float $price,
+    ) {
+        return new static(
+            Uuid::create($uuid),
+            Uuid::create($customerUuid),
+            $status,
+            OrderCode::create($code),
+            Carbon::parse($orderedAt),
+            Price::create($price)
         );
     }
 
