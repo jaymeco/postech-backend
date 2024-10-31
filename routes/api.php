@@ -11,6 +11,9 @@ Route::prefix('customer')->group(function () {
     Route::post('/', [CustomerController::class, 'create']);
 
     Route::prefix('orders')->group(function () {
+        Route::prefix('{orderUuid}')->group(function () {
+            Route::put('/checkout', [CustomerOrderController::class, 'checkout']);
+        });
         Route::post('/', [CustomerOrderController::class, 'create']);
     });
 });
