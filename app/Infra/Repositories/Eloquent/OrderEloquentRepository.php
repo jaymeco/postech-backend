@@ -52,7 +52,7 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
 
     public function getByUuid(string $uuid): Order
     {
-        $model = $this->query->where(Model::UUID, value: $uuid)
+        $model = $this->query->where(Model::UUID, '=', $uuid)
             ->with(['products', 'status'])
             ->first();
 
@@ -60,7 +60,7 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
 
         $order = Order::restore(
             $model->uuid,
-            Customer::where($model->customer_id)->first(),
+            Customer::where(Customer::ID, '=', $model->customer_id)->first(),
             $model->code,
             OrderStatus::restore($model->status->uuid, $model->status->name),
             $model->ordered_at,
@@ -85,8 +85,11 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
 
     public function update(Order $order): void
     {
-        $this->query->update([
-            Model::STATUS_ID => ModelsOrderStatus::where('uuid', '=', $order->getStatus()->getUuid()->getValue()),
+        $this->query
+        ->where(Model::UUID, '=', $order->getUuid()->getValue())
+        ->update([
+            Model::STATUS_ID => ModelsOrderStatus::where('uuid', '=', $order->getStatus()->getUuid()->getValue())
+            ->first()->id,
             Model::PRICE => $order->getPrice()->getValue(),
         ]);
     }
