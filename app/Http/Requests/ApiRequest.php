@@ -9,6 +9,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 abstract class ApiRequest extends FormRequest
 {
@@ -24,12 +25,18 @@ abstract class ApiRequest extends FormRequest
     {
         return [
             'required' => ValidationRules::REQUIRED,
+            'present' => ValidationRules::REQUIRED,
             'type' => ValidationRules::TYPE,
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw RequestException::create($validator);
+    }
+
+    protected function dotValidated(string $key, $default = null)
+    {
+        return Arr::get($this->validated(), $key, $default);
     }
 }
