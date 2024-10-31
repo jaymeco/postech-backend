@@ -11,4 +11,9 @@ class OrderCode extends ValueObject
 
         return new static($code);
     }
+
+    public static function create(string $value)
+    {
+        return new static($value);
+    }
 }
