@@ -31,4 +31,7 @@ Route::prefix('establishment')->group(function () {
             Route::delete('/', [ProductController::class, 'delete']);
         });
     });
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'list']);
+    });
 });
