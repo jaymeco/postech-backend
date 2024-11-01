@@ -56,4 +56,8 @@ class Order extends Model
     {
         return $this->belongsTo(OrderStatus::class);
     }
+
+    public function customer() {
+        return $this->belongsTo(Customer::class);
+    }
 }
