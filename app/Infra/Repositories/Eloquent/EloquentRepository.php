@@ -2,7 +2,7 @@
 
 namespace App\Infra\Repositories\Eloquent;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class EloquentRepository
 {
