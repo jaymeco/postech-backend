@@ -14,6 +14,13 @@ class CustomerController extends Controller
 
         $customer = $useCase->execute($request->getEmail(), $request->getName());
 
-        return response()->json($customer, 200);
+        return response()->json(
+            [
+                'uuid' => $customer->getUuid()->getValue(),
+                'name' => $customer->getName()->getValue(),
+                'email' => $customer->getEmail()->getValue(),
+                'cpf' => $customer->getCpf()->getValue(),
+                'type' => $customer->getType()->getValue(),
+            ], 200);
     }
 }

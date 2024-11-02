@@ -7,6 +7,7 @@ use App\Http\Customer\Requests\CreateOrderRequest;
 use Core\Application\Contracts\Services\OrderService;
 use Core\Application\UseCases\CreateOrderUseCase;
 use Core\Application\UseCases\MakeCheckoutUseCase;
+use Core\Domain\Entities\Order;
 
 class OrderController extends Controller
 {
@@ -20,7 +21,7 @@ class OrderController extends Controller
 
         $order = $useCase->execute($request->getProducts(), $request->getCustomerCpf());
 
-        return response()->json($order, 201);
+        return response()->json($this->parseOrder($order), 201);
     }
 
     public function checkout(string $orderUuid)
@@ -38,22 +39,27 @@ class OrderController extends Controller
 
         return response()
             ->json(
-                [
-                    'uuid' => $order->getUuid()->getValue(),
-                    'code' => $order->getCode()->getValue(),
-                    'status' => ['uuid' => $order->getStatus()->getUuid()->getValue(), 'name' => $order->getStatus()->getName()->getValue()],
-                    'ordered_at' => $order->getOrderedAt(),
-                    'price' => $order->getPrice()->getValue(),
-                    'products' => array_map(fn($product) => [
-                        'uuid' => $product->getUuid()->getValue(),
-                        'name' => $product->getName()->getValue(),
-                        'descritption' => $product->getDescription(),
-                        'image_uri' => $product->getImageUri(),
-                        'price' => $product->getPrice()->getValue(),
-                        'category' => ['uuid' => $product->getCategory()->getUuid()->getValue(), 'name' => $product->getCategory()->getName()->getValue()],
-                    ], $order->getProducts())
-                ],
+                $this->parseOrder($order),
                 200,
             );
+    }
+
+    private function parseOrder(Order $order)
+    {
+        return [
+            'uuid' => $order->getUuid()->getValue(),
+            'code' => $order->getCode()->getValue(),
+            'status' => ['uuid' => $order->getStatus()->getUuid()->getValue(), 'name' => $order->getStatus()->getName()->getValue()],
+            'ordered_at' => $order->getOrderedAt(),
+            'price' => $order->getPrice()->getValue(),
+            'products' => array_map(fn($product) => [
+                'uuid' => $product->getUuid()->getValue(),
+                'name' => $product->getName()->getValue(),
+                'descritption' => $product->getDescription(),
+                'image_uri' => $product->getImageUri(),
+                'price' => $product->getPrice()->getValue(),
+                'category' => ['uuid' => $product->getCategory()->getUuid()->getValue(), 'name' => $product->getCategory()->getName()->getValue()],
+            ], $order->getProducts())
+        ];
     }
 }

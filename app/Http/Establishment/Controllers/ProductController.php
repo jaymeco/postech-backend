@@ -7,6 +7,7 @@ use App\Http\Establishment\Requests\CreateProductRequest;
 use App\Http\Establishment\Requests\UpdateProductRequest;
 use Core\Application\Services\ProductService;
 use Core\Application\UseCases\CreateCustomerUseCase;
+use Core\Domain\Entities\Product;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,7 @@ class ProductController extends Controller
             $request->getPrice(),
         );
 
-        return response()->json($product, 201);
+        return response()->json($this->parseProduct($product), 201);
     }
 
     public function update(string $uuid, UpdateProductRequest $request)
@@ -45,7 +46,7 @@ class ProductController extends Controller
     {
         $products = $this->service->getAll($categoryUuid);
 
-        return response()->json($products, 200);
+        return response()->json(array_map(fn($product) => $this->parseProduct($product), $products), 200);
     }
 
     public function delete(string $uuid)
@@ -53,5 +54,17 @@ class ProductController extends Controller
         $this->service->delete($uuid);
 
         return response()->json([], 204);
+    }
+
+    private function parseProduct(Product $product)
+    {
+        return [
+            'uuid' => $product->getUuid()->getValue(),
+            'name' => $product->getName()->getValue(),
+            'description' => $product->getDescription(),
+            'image_uri' => $product->getImageUri(),
+            'category' => ['uuid' => $product->getCategory()->getUuid()->getValue(), 'name' => $product->getCategory()->getName()->getValue()],
+            'price' => $product->getPrice()->getValue(),
+        ];
     }
 }
