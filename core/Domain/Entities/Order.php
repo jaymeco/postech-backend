@@ -103,9 +103,9 @@ class Order
         return $this->products;
     }
 
-    public function defineReady()
+    public function defineReceived()
     {
-        $enum = OrderStatusEnum::READY;
+        $enum = OrderStatusEnum::RECEIVED;
         $this->status = OrderStatus::restore(
             $enum->key(),
             $enum->name(),
