@@ -16,10 +16,12 @@ tags:
     description: "[Orders] Rotas para o recurso de pedido"
 
 paths:
-  /customers:
+  /customer:
     $ref: 'customer/doc.yaml'
-  /customers/orders:
+  /customer/orders:
     $ref: 'customer/order/create.yaml'
+  /customer/orders/{orderUuid}:
+    $ref: 'customer/order/get-by-uuid.yaml'
 
   /establishment/products:
     $ref: 'establishment/product.yaml'
