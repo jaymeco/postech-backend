@@ -8,7 +8,6 @@ use App\Models\Order as Model;
 use App\Models\OrderStatus as ModelsOrderStatus;
 use App\Models\Product;
 use Core\Application\Contracts\Repositories\OrderRepository;
-use Core\Domain\Base\Enums\OrderStatusEnum;
 use Core\Domain\Entities\Category;
 use Core\Domain\Entities\Order;
 use Core\Domain\Entities\OrderStatus;
@@ -58,17 +57,8 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
 
         throw_if(is_null($model), ApplicationException::notFound('order', 'uuid'));
 
-        $order = Order::restore(
-            $model->uuid,
-            Customer::where(Customer::ID, '=', $model->customer_id)->first(),
-            $model->code,
-            OrderStatus::restore($model->status->uuid, $model->status->name),
-            $model->ordered_at,
-            $model->price
-        );
-
-        $model->products->each(function ($product) use ($order) {
-            $entity = EntitiesProduct::restore(
+        $products = $model->products->map(function ($product) {
+            return EntitiesProduct::restore(
                 $product->uuid,
                 $product->name,
                 $product->description,
@@ -76,11 +66,17 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
                 $product->image_uri,
                 $product->price,
             );
+        })->toArray();
 
-            $order->addProduct($entity);
-        });
-
-        return $order;
+        return Order::restore(
+            $model->uuid,
+            Customer::where(Customer::ID, '=', $model->customer_id)->first(),
+            $model->code,
+            OrderStatus::restore($model->status->uuid, $model->status->name),
+            $model->ordered_at,
+            $model->price,
+            $products,
+        );
     }
 
     public function update(Order $order): void
@@ -100,17 +96,8 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
             ->with(['products', 'customer', 'status'])
             ->get()
             ->map(function (Model $model) {
-                $order = Order::restore(
-                    $model->uuid,
-                    $model->customer->uuid,
-                    $model->code,
-                    OrderStatus::restore($model->status->uuid, $model->status->name),
-                    $model->ordered_at,
-                    $model->price
-                );
-
-                $model->products->each(function ($product) use ($order) {
-                    $entity = EntitiesProduct::restore(
+                $products = $model->products->map(function ($product) {
+                    return EntitiesProduct::restore(
                         $product->uuid,
                         $product->name,
                         $product->description,
@@ -118,11 +105,17 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
                         $product->image_uri,
                         $product->price,
                     );
+                })->toArray();
 
-                    $order->addProduct($entity);
-                });
-
-                return $order;
+                return Order::restore(
+                    $model->uuid,
+                    $model->customer->uuid,
+                    $model->code,
+                    OrderStatus::restore($model->status->uuid, $model->status->name),
+                    $model->ordered_at,
+                    $model->price,
+                    $products,
+                );
             })->toArray();
     }
 }
