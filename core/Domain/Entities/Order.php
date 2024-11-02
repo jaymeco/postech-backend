@@ -21,7 +21,10 @@ class Order
         private OrderCode $code,
         private DateTimeInterface $orderedAt,
         private Price $price,
-    ) {}
+        ?array $products = [],
+    ) {
+        $this->products = $products;
+    }
 
     public static function create(string $customerUuid)
     {
@@ -45,6 +48,7 @@ class Order
         OrderStatus $status,
         string $orderedAt,
         float $price,
+        array $products,
     ) {
         return new static(
             Uuid::create($uuid),
@@ -52,7 +56,8 @@ class Order
             $status,
             OrderCode::create($code),
             Carbon::parse($orderedAt),
-            Price::create($price)
+            Price::create($price),
+            $products,
         );
     }
 
