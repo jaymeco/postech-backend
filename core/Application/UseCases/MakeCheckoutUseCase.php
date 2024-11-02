@@ -14,7 +14,7 @@ class MakeCheckoutUseCase
     {
         $order = $this->orderRepository->getByUuid($orderUuid);
 
-        $order->defineReady();
+        $order->defineReceived();
 
         $this->orderRepository->update($order);
     }
