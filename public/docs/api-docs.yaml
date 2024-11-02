@@ -22,6 +22,8 @@ paths:
     $ref: 'customer/order/create.yaml'
   /customer/orders/{orderUuid}:
     $ref: 'customer/order/get-by-uuid.yaml'
+  /customer/orders/{orderUuid}/checkout:
+    $ref: 'customer/order/checkout.yaml'
 
   /establishment/products:
     $ref: 'establishment/product.yaml'
