@@ -4,17 +4,18 @@ namespace Core\Application\Services;
 
 use Core\Application\Contracts\Repositories\CategoryRepository;
 use Core\Application\Contracts\Repositories\ProductRepository;
+use Core\Application\Contracts\Services\ProductService as Contract;
 use Core\Domain\Base\Helpers\DirtyValuesHelper;
 use Core\Domain\Entities\Product;
 
-class ProductService
+class ProductService implements Contract
 {
     public function __construct(
         private ProductRepository $productRepository,
         private CategoryRepository $categoryRepository
     ) {}
 
-    public function create(string $name, string $description, string $categoryUuid, string $imageUri, float $price)
+    public function create(string $name, string $description, string $categoryUuid, string $imageUri, float $price): Product
     {
         $category = $this->categoryRepository->getByUuid($categoryUuid);
 
@@ -25,7 +26,7 @@ class ProductService
         return $product;
     }
 
-    public function getByUuid(string $uuid)
+    public function getByUuid(string $uuid): Product
     {
         return $this->productRepository->getByUuid($uuid);
     }
@@ -37,7 +38,7 @@ class ProductService
         ?string $categoryUuid = null,
         ?string $imageUri = null,
         ?float $price = null
-    ) {
+    ): void {
         $product = $this->productRepository->getByUuid($productUuid);
         $category = $product->getCategory();
         if (!is_null($categoryUuid)) {
@@ -56,14 +57,14 @@ class ProductService
         $this->productRepository->update($updatedProduct);
     }
 
-    public function delete(string $uuid)
+    public function delete(string $uuid): void
     {
         $product = $this->productRepository->getByUuid($uuid);
 
         $this->productRepository->delete($product);
     }
 
-    public function getAll(?string $categoryUuid = null)
+    public function getAll(?string $categoryUuid = null): array
     {
         $products = $this->productRepository->all($categoryUuid);
 
