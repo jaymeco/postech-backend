@@ -5,8 +5,7 @@ namespace App\Http\Establishment\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Establishment\Requests\CreateProductRequest;
 use App\Http\Establishment\Requests\UpdateProductRequest;
-use Core\Application\Services\ProductService;
-use Core\Application\UseCases\CreateCustomerUseCase;
+use Core\Application\Contracts\Services\ProductService;
 use Core\Domain\Entities\Product;
 
 class ProductController extends Controller

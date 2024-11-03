@@ -10,6 +10,7 @@ use App\Infra\Repositories\Memory\CustomerMemoryRepository;
 use Core\Application\Contracts\Repositories as RepositoriesContracts;
 use Core\Application\Contracts\Services as ServiceContracts;
 use Core\Application\Services\OrderService;
+use Core\Application\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         RepositoriesContracts\OrderRepository::class => OrderEloquentRepository::class,
 
         ServiceContracts\OrderService::class => OrderService::class,
+        ServiceContracts\ProductService::class => ProductService::class,
     ];
     /**
      * Register any application services.
