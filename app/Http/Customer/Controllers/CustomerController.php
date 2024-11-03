@@ -19,7 +19,7 @@ class CustomerController extends Controller
                 'uuid' => $customer->getUuid()->getValue(),
                 'name' => $customer->getName()->getValue(),
                 'email' => $customer->getEmail()->getValue(),
-                'cpf' => $customer->getCpf()->getValue(),
+                'cpf' => is_null($customer->getCpf()) ? null : $customer->getCpf()->getValue(),
                 'type' => $customer->getType()->getValue(),
             ], 200);
     }
