@@ -1,66 +1,56 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API Tech Challenge
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta aplicação foi desenvolvida utilizando a arquitetura hexagonal e alguns método do DDD. Nas seções abaixo terão as explicações quais camadas o projeto possui, junto com a explicação da organização física dos arquivos e o que a aplicação necessita para ser utilizada
 
-## About Laravel
+## Rodando o projeto
+O projeto possui arquivos de configuração docker (dockerfile e docker-compose) para rodar em ambientes de desenvolvimento.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A configuração para o projeto ser executado está completamente provisionado no arquivo docker-compose. Para executar o projeto para testes, basta seguir os passos a seguir e executar os devidos comandos.
+#### Montagem do ambiente
+Montagem do ambiente utilizando o docker compose:
+```
+docker compose -d --build
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Com o ambiente provisionado, basta realizar o acesso ao terminal dentro do container utilizando o comando:
+```
+docker exec -it post-tech-backend-1 bash
+```
+Obs.: Caso o nome do *container* criado não seja o mesmo do citado acima, basta apenas colocar o nome do *container* que foi criado após a montagem do ambiente.
+#### Instalação do projeto
+O aplicação foi desenvolvida utilizando php 8.3 com Laravel 11 e banco Postgresql. Uma vez dentro do *container*, para realizar a instalação do projeto é necessário executar os comandos abaixo
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Instalação das dependências**:
+```
+composer install
+```
 
-## Learning Laravel
+**Rodando migração do banco de dados**:
+```
+php artisan migrate
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Rodando seeders para o banco de dados**:
+```
+php artisan db:seed
+```
+#### Execução do projeto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Para executar a aplicação, basta executar o comando abaixo e a aplicação estará pronto para uso:
+```
+php artisan serve --host 0.0.0.0
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Documentação**
+Ao executar o projeto, documentação da API criada utilizando o Swagger, estará disponível na seguinte url: `http://localhost:8000/api/documentation`
+## Explicação das Camadas
+Utilizando os conceitos da arquitetura hexagonal, a aplicação foi construída isolando o domínio da aplicação das camadas mais externas do projeto. Com a utilização do framework Laravel, a organização física das pastas tornou-se diferente quando o assunto são os *adapters* com seus *driven* e *driver*.
 
-## Laravel Sponsors
+- `/core`: Nesta pasta se encontra o centro do hexagonal, contendo toda a logica de negocio do projeto.
+	- `/core/Domain`: Na pasta `Domain` encontra-se toda a definição do domínio da aplicação, é nela que se encontram as entidades e seus value objects que validam a regra de negocio da aplicação.
+	- `/core/Application`: Esta pasta é destinada a camada de aplicação do projeto, onde toda a orquestração das entidades e consumo de interfaces acontece. Nela entram-se duas pasta
+- `/app`: Esta pasta é nativa do framework Laravel, e ela representa a camada de *adapters* da aplicação é nela que a implementação da camada de infra e API se encontram.
+	- `/app/Http`: Ainda se utilizando da estruturação do framework, a pasta `/Http` contém toda a definição do ator condutor da aplicação, nesse caso a API. É nesta pasta que a criação e implementação das *controllers* se encontram.
+	- `/app/Infra`: Nesta pasta se encontra a implementação dos contratos definidos pelo domínio  da aplicação, é nela que o ator conduzido (nesse caso o repositório) se encontra. Existem duas implementações dos repositórios, uma utilizando dados em memória e outra utilizando o ORM Eloquent. Os repositórios em memória foram utilizados para a implementação dos testes da aplicação enquanto os com Eloquent são as implementações definitivas.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+OBS.: Sobre a camada dos atores condutores, a definição das rota são feita na pasta `/routes` seguindo a estruturação do Laravel.
