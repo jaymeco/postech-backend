@@ -8,6 +8,7 @@ use Core\Application\Contracts\Repositories\ProductRepository;
 use Core\Domain\Entities\Customer;
 use Core\Domain\Entities\Order;
 use Core\Domain\Entities\Product;
+use Illuminate\Support\Facades\DB;
 
 class CreateOrderUseCase
 {
@@ -19,14 +20,22 @@ class CreateOrderUseCase
 
     public function execute(array $products, ?string $cpf = null): Order
     {
-        $customer = Customer::create($cpf);
-        $this->customerRepository->save($customer);
+        DB::beginTransaction();
+        try {
+            $customer = Customer::create($cpf);
+            $this->customerRepository->save($customer);
 
-        $order = Order::create($customer->getUuid()->getValue());
+            $order = Order::create($customer->getUuid()->getValue());
 
-        $this->addProductsInOrder($products, $order);
+            $this->addProductsInOrder($products, $order);
 
-        $this->orderRepository->save($order);
+            $this->orderRepository->save($order);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
 
         return $order;
     }
