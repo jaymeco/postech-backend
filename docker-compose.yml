@@ -23,6 +23,7 @@ services:
             - DB_HOST=172.24.0.5
             - DB_CONNECTION=pgsql
             - DB_DATABASE=pos_tech
+            - APP_ENV=local
         ports:
             - "8000:8000"
             - 9000
