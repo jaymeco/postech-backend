@@ -1,0 +1,75 @@
+post:
+  tags:
+    - orders
+  summary: Cadastra pedido.
+  description: Realiza o cadastro de pedido.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            products:
+              type: array
+              description: Array de uuid dos produtos selecionados para o pedido
+            customer_cpf:
+              type: string
+              description: CPF do cliente que esta criando o pedido
+          example:
+            products: ["68da5315-1f9c-4c82-910b-dc9e31b325f3"]
+            customer_cpf: 41762592053
+          required:
+            - products
+  responses:
+    "201":
+      description: Pedido cadastrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: UUID de identificao de pedido criado
+              code:
+                type: string
+                description: Codigo do pedido gerado para identificacao para o cliente
+              status:
+                type: object
+                description: Status em que o pedido se encontra
+              ordered_at:
+                type: string
+                description: Data em que o pedido foi solicitado
+              price:
+                type: integer
+                description: Preco total do pedido, sendo um somatorio do preco dos produtos
+              products:
+                type: array
+                descripton: Lista de produtos que foram adicionados no pedido
+            example:
+              uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+              code: Misto Quente
+              status: {
+                "uuid": "ff25c138-3d7e-48cf-bb82-b9c072ebf2c6",
+                name: "Pedido criado"
+              }
+              price: 10
+              ordered_at: "2024-10-31T00:00:00.000000Z"
+              products: [
+                {
+                  "uuid": "68da5315-1f9c-4c82-910b-dc9e31b325fd",
+                  "name": "Misto quente",
+                  "description": "Um bom lanche",
+                  "image_uri": "https://imageplaceholder.net/600x400",
+                  "price": 10,
+                  "category": {
+                    "uuid": "4236e27e-6fbe-494d-8777-edf2161f9d7d",
+                    "name": "Lanche"
+                  }
+                }
+              ]
+    "400":
+      $ref: '../../base-doc.yaml#/components/responses/BadRequest'
+    "404":
+      $ref: '../../base-doc.yaml#/components/responses/NotFound'

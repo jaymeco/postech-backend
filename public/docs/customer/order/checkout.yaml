@@ -1,0 +1,17 @@
+put:
+  tags:
+    - orders
+  summary: Checkout do pedido.
+  description: Realiza o checkout do pedido.
+  parameters:
+    - in: path
+      name: orderUuid
+      schema:
+        type: string
+      required: true
+      description: Uuid do pedido
+  responses:
+    "204":
+      description: Not Content
+    "404":
+      $ref: '../../base-doc.yaml#/components/responses/NotFound'

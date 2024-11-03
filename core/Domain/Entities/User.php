@@ -4,7 +4,8 @@ namespace Core\Domain\Entities;
 
 use Core\Domain\ValueObjects\Email;
 use Core\Domain\ValueObjects\Name;
-use Ramsey\Uuid\Uuid;
+use Core\Domain\ValueObjects\Uuid;
+use Ramsey\Uuid\Uuid as Uuidv4;
 
 class User
 {
@@ -13,7 +14,7 @@ class User
     private function __construct(
         private Email $email,
         private Name $name,
-        private string $uuid,
+        private Uuid $uuid,
     ) {}
 
     public static function create(string $email, string $name, string $password)
@@ -21,7 +22,7 @@ class User
         $instance = new static(
             Email::create($email),
             Name::create($name),
-            Uuid::uuid4(),
+            Uuid::create(Uuidv4::uuid4()),
         );
 
         $instance->createPassword($password);

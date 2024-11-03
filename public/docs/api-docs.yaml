@@ -1,0 +1,35 @@
+openapi: 3.0.0
+info:
+  title: Pos-Tech API Tech Challenge
+  description: Documenta para api da Fase 1 do Tech Challenge.
+  version: v1.0
+
+servers:
+  - url: http://localhost:8000/api
+
+tags:
+  - name: customers
+    description: "[Customers] Rotas para o recurso de cliente"
+  - name: products
+    description: "[Products] Rotas para o recurso de produto"
+  - name: orders
+    description: "[Orders] Rotas para o recurso de pedido"
+
+paths:
+  /customer:
+    $ref: 'customer/doc.yaml'
+  /customer/orders:
+    $ref: 'customer/order/create.yaml'
+  /customer/orders/{orderUuid}:
+    $ref: 'customer/order/get-by-uuid.yaml'
+  /customer/orders/{orderUuid}/checkout:
+    $ref: 'customer/order/checkout.yaml'
+
+  /establishment/products:
+    $ref: 'establishment/product.yaml'
+  /establishment/products/{productuuid}:
+    $ref: 'establishment/product/update.yaml'
+  /establishment/categories/{categoryUuid}/products:
+    $ref: 'establishment/product/all-by-category.yaml'
+  /establishment/orders:
+    $ref: 'establishment/order/get-all.yaml'

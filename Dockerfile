@@ -14,6 +14,6 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
 
 WORKDIR /app
 
-COPY ./php.conf/xdebug.ini /docker/php/conf.d/xdebug.ini
+COPY ./php.conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 EXPOSE 8000

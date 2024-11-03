@@ -3,23 +3,46 @@ version: '3'
 services:
     postgres:
         image: postgres:17-alpine
-        restart: always
         environment:
             - POSTGRES_PASSWORD=postgres
             - POSTGRES_USER=postgres
         ports:
             - "5432:5432"
+        networks:
+            pos_tech_net:
+                ipv4_address: 172.24.0.5
         volumes:
             - postgres_data:/var/lib/postgresql/data
+            - ./db.conf/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
 
     backend:
         build: .
+        environment:
+            - DB_USERNAME=development
+            - DB_PASSWORD=development
+            - DB_HOST=172.24.0.5
+            - DB_CONNECTION=pgsql
+            - DB_DATABASE=pos_tech
+            - APP_ENV=local
         ports:
             - "8000:8000"
+            - 9000
         volumes:
             - ./:/app
+        networks:
+            pos_tech_net:
+                ipv4_address: 172.24.0.6
         depends_on:
             - postgres
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
 volumes:
     postgres_data:
+networks:
+    pos_tech_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "172.24.0.0/24"
