@@ -95,6 +95,7 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
         return $this->query
             ->with(['products', 'customer', 'status'])
             ->get()
+            ->sortBy('ordered_at')
             ->map(function (Model $model) {
                 $products = $model->products->map(function ($product) {
                     return EntitiesProduct::restore(
