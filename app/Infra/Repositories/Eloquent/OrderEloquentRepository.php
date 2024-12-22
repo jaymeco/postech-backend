@@ -3,6 +3,7 @@
 namespace App\Infra\Repositories\Eloquent;
 
 use App\Exceptions\ApplicationException;
+use App\Infra\Adapters\Models\OrderAdapter;
 use App\Models\Customer;
 use App\Models\Order as Model;
 use App\Models\OrderStatus as ModelsOrderStatus;
@@ -52,31 +53,12 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
     public function getByUuid(string $uuid): Order
     {
         $model = $this->query->where(Model::UUID, '=', $uuid)
-            ->with(['products', 'status'])
+            ->with(['products', 'customer', 'status'])
             ->first();
 
         throw_if(is_null($model), ApplicationException::notFound('order', 'uuid'));
 
-        $products = $model->products->map(function ($product) {
-            return EntitiesProduct::restore(
-                $product->uuid,
-                $product->name,
-                $product->description,
-                Category::restore($product->category->uuid, $product->category->name),
-                $product->image_uri,
-                $product->price,
-            );
-        })->toArray();
-
-        return Order::restore(
-            $model->uuid,
-            Customer::where(Customer::ID, '=', $model->customer_id)->first(),
-            $model->code,
-            OrderStatus::restore($model->status->uuid, $model->status->name),
-            $model->ordered_at,
-            $model->price,
-            $products,
-        );
+        return OrderAdapter::parse($model);
     }
 
     public function update(Order $order): void
@@ -96,27 +78,8 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
             ->with(['products', 'customer', 'status'])
             ->get()
             ->sortBy('ordered_at')
-            ->map(function (Model $model) {
-                $products = $model->products->map(function ($product) {
-                    return EntitiesProduct::restore(
-                        $product->uuid,
-                        $product->name,
-                        $product->description,
-                        Category::restore($product->category->uuid, $product->category->name),
-                        $product->image_uri,
-                        $product->price,
-                    );
-                })->toArray();
-
-                return Order::restore(
-                    $model->uuid,
-                    $model->customer->uuid,
-                    $model->code,
-                    OrderStatus::restore($model->status->uuid, $model->status->name),
-                    $model->ordered_at,
-                    $model->price,
-                    $products,
-                );
-            })->toArray();
+            ->map(fn(Model $model) => OrderAdapter::parse($model))
+            ->values()
+            ->toArray();
     }
 }
