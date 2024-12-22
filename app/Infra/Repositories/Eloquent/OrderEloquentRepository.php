@@ -9,10 +9,8 @@ use App\Models\Order as Model;
 use App\Models\OrderStatus as ModelsOrderStatus;
 use App\Models\Product;
 use Core\Application\Contracts\Repositories\OrderRepository;
-use Core\Domain\Entities\Category;
+use Core\Domain\Base\Enums\OrderStatusEnum;
 use Core\Domain\Entities\Order;
-use Core\Domain\Entities\OrderStatus;
-use Core\Domain\Entities\Product as EntitiesProduct;
 use Illuminate\Support\Facades\DB;
 
 class OrderEloquentRepository extends EloquentRepository implements OrderRepository
@@ -75,6 +73,9 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
     public function all(): array
     {
         return $this->query
+            ->whereHas(Model::STATUS, function ($query) {
+                $query->whereNot('uuid', '=', OrderStatusEnum::FINISHED);
+            })
             ->with(['products', 'customer', 'status'])
             ->get()
             ->sortBy('ordered_at')
