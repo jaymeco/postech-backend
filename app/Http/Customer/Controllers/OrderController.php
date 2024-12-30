@@ -28,9 +28,9 @@ class OrderController extends Controller
     {
         $useCase = app(MakeCheckoutUseCase::class);
 
-        $useCase->execute($orderUuid);
+        $data = $useCase->execute($orderUuid);
 
-        return response()->json([], 204);
+        return response()->json($data);
     }
 
     public function getByUuid(string $orderUuid)
