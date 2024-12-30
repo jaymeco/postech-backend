@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Infra\Integrations\Http\GuzzleHttpClient;
+use App\Infra\Integrations\Http\HttpClient;
+use App\Infra\Integrations\MockPaymentService;
 use App\Infra\Repositories\Eloquent\CategoryEloquentRepository;
 use App\Infra\Repositories\Eloquent\CustomerEloquentRepository;
 use App\Infra\Repositories\Eloquent\OrderEloquentRepository;
@@ -23,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
 
         ServiceContracts\OrderService::class => OrderService::class,
         ServiceContracts\ProductService::class => ProductService::class,
+        ServiceContracts\PaymentService::class => MockPaymentService::class,
+        HttpClient::class => GuzzleHttpClient::class,
     ];
     /**
      * Register any application services.
