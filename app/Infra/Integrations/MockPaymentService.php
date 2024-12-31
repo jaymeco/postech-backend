@@ -4,6 +4,7 @@ namespace App\Infra\Integrations;
 
 use App\Infra\Integrations\Http\HttpClient;
 use Core\Application\Contracts\Services\PaymentService;
+use Core\Application\Dtos\PaymentData;
 use Core\Application\Dtos\PaymentRequest;
 use Core\Application\Dtos\QrPaymentData;
 
@@ -22,5 +23,10 @@ class MockPaymentService implements PaymentService
         ]);
 
         return new QrPaymentData($response->data->qr_data);
+    }
+
+    public function findPaymentById(string $id): PaymentData
+    {
+        return new PaymentData('approved', '2017-08-31T11:26:38.000Z');
     }
 }
