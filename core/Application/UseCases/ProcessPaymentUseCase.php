@@ -34,6 +34,14 @@ class ProcessPaymentUseCase
                 $payment->setPaid();
             }
 
+            if ($paymentData->isRejected()) {
+                $payment->setRefused();
+            }
+
+            if ($paymentData->isCancelled()) {
+                $payment->setCancelled();
+            }
+
             $this->paymentRepository->update($payment);
             $this->orderRepository->update($order);
             DB::commit();
