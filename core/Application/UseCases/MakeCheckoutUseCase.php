@@ -30,7 +30,7 @@ class MakeCheckoutUseCase
         $paymentRequest = new PaymentRequest(
             $order->getUuid()->getValue(),
             $order->getPrice()->getValue(),
-            "http://localhost:8000/api/v1/webhooks/orders/$orderUuid/process-payment",
+            "http://localhost:8002/api/v1/webhooks/orders/$orderUuid/process-payment",
         );
 
         return $this->paymentService->requestQrCode($paymentRequest);
