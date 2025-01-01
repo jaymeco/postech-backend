@@ -14,6 +14,7 @@ Route::prefix('customer')->group(function () {
     Route::prefix('orders')->group(function () {
         Route::prefix('{orderUuid}')->group(function () {
             Route::get('/', [CustomerOrderController::class, 'getByUuid']);
+            Route::get('/check-payment', [CustomerOrderController::class, 'checkOrderPayment']);
             Route::put('/checkout', [CustomerOrderController::class, 'checkout']);
         });
         Route::post('/', [CustomerOrderController::class, 'create']);
