@@ -58,6 +58,11 @@ class Payment
     public function setRefused()
     {
         $this->status = PaymentStatus::REFUSED->value;
+    }
+
+    public function setCancelled()
+    {
+        $this->status = PaymentStatus::CANCELLED->value;
         $this->active = false;
     }
 
