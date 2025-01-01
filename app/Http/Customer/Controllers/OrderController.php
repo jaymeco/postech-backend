@@ -5,6 +5,7 @@ namespace App\Http\Customer\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Customer\Requests\CreateOrderRequest;
 use Core\Application\Contracts\Services\OrderService;
+use Core\Application\UseCases\CheckPaymentUseCase;
 use Core\Application\UseCases\CreateOrderUseCase;
 use Core\Application\UseCases\MakeCheckoutUseCase;
 use Core\Domain\Entities\Order;
@@ -24,13 +25,21 @@ class OrderController extends Controller
         return response()->json($this->parseOrder($order), 201);
     }
 
+    public function checkOrderPayment(string $orderUuid)
+    {
+        $useCase = app(CheckPaymentUseCase::class);
+        $data = $useCase->execute($orderUuid);
+
+        return response()->json($data);
+    }
+
     public function checkout(string $orderUuid)
     {
         $useCase = app(MakeCheckoutUseCase::class);
 
-        $useCase->execute($orderUuid);
+        $data = $useCase->execute($orderUuid);
 
-        return response()->json([], 204);
+        return response()->json($data);
     }
 
     public function getByUuid(string $orderUuid)
