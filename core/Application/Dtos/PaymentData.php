@@ -13,4 +13,14 @@ class PaymentData
     {
         return $this->status == 'approved';
     }
+
+    public function isRejected()
+    {
+        return $this->status == 'rejected';
+    }
+
+    public function isCancelled()
+    {
+        return $this->status == 'cancelled';
+    }
 }
