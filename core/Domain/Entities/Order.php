@@ -112,9 +112,18 @@ class Order
         );
     }
 
-    public function setAsReady()
+    public function setAsPreparing()
     {
         $enum = OrderStatusEnum::PREPARING;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
+
+    public function setAsReady()
+    {
+        $enum = OrderStatusEnum::READY;
         $this->status = OrderStatus::restore(
             $enum->key(),
             $enum->name(),
