@@ -74,11 +74,20 @@ class OrderEloquentRepository extends EloquentRepository implements OrderReposit
     {
         return $this->query
             ->whereHas(Model::STATUS, function ($query) {
-                $query->whereNot('uuid', '=', OrderStatusEnum::FINISHED);
+                $query->whereNotIn('uuid', [OrderStatusEnum::CREATED, OrderStatusEnum::FINISHED]);
             })
             ->with(['products', 'customer', 'status'])
             ->get()
             ->sortBy('ordered_at')
+            ->sortBy(function ($order) {
+                return $order->status->uuid == OrderStatusEnum::READY->key();
+            })
+            ->sortBy(function ($order) {
+                return $order->status->uuid == OrderStatusEnum::PREPARING->key();
+            })
+            ->sortBy(function ($order) {
+                return $order->status->uuid == OrderStatusEnum::RECEIVED->key();
+            })
             ->map(fn(Model $model) => OrderAdapter::parse($model))
             ->values()
             ->toArray();
