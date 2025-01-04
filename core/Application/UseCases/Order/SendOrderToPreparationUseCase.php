@@ -21,7 +21,7 @@ class SendOrderToPreparationUseCase
 
         $this->throwErrorIfOrderIsNotReceived($order);
 
-        $order->setAsReady();
+        $order->setAsPreparing();
 
         $this->repository->update($order);
 
