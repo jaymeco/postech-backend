@@ -38,6 +38,7 @@ Route::prefix('establishment')->group(function () {
         Route::get('/', [OrderController::class, 'list']);
         Route::prefix('{orderUuid}')->group(function () {
             Route::put('/prepare', [OrderController::class, 'sendToPreparation']);
+            Route::put('/complete', [OrderController::class, 'updateToReady']);
         });
     });
 });
