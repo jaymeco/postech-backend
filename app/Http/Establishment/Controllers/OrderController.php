@@ -3,7 +3,6 @@
 namespace App\Http\Establishment\Controllers;
 
 use App\Http\Controllers\Controller;
-use Core\Application\Contracts\Services\OrderService;
 use Core\Application\UseCases\Order\FinishOrderUseCase;
 use Core\Application\UseCases\Order\GetAllOrdersUseCase;
 use Core\Application\UseCases\Order\SendOrderToPreparationUseCase;
@@ -11,10 +10,6 @@ use Core\Application\UseCases\Order\UpdateOrderToReadyUseCase;
 
 class OrderController extends Controller
 {
-    public function __construct(
-        private readonly OrderService $service,
-    ) {}
-
     public function list()
     {
         $useCase = app(GetAllOrdersUseCase::class);
