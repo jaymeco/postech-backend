@@ -129,4 +129,13 @@ class Order
             $enum->name(),
         );
     }
+
+    public function finish()
+    {
+        $enum = OrderStatusEnum::FINISHED;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
 }
