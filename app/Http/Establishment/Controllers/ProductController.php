@@ -5,18 +5,18 @@ namespace App\Http\Establishment\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Establishment\Requests\CreateProductRequest;
 use App\Http\Establishment\Requests\UpdateProductRequest;
-use Core\Application\Contracts\Services\ProductService;
-use Core\Domain\Entities\Product;
+use Core\Application\UseCases\Product\AllProductsByCategoryUseCase;
+use Core\Application\UseCases\Product\CreateProductUseCase;
+use Core\Application\UseCases\Product\DeleteProductUseCase;
+use Core\Application\UseCases\Product\UpdateProductUseCase;
 
 class ProductController extends Controller
 {
-    public function __construct(
-        private readonly ProductService $service,
-    ) {}
-
     public function create(CreateProductRequest $request)
     {
-        $product = $this->service->create(
+        $useCase = app(CreateProductUseCase::class);
+
+        $product = $useCase->execute(
             $request->getName(),
             $request->getDescription(),
             $request->getCategoryUuid(),
@@ -24,12 +24,14 @@ class ProductController extends Controller
             $request->getPrice(),
         );
 
-        return response()->json($this->parseProduct($product), 201);
+        return response()->json($product, 201);
     }
 
     public function update(string $uuid, UpdateProductRequest $request)
     {
-        $this->service->update(
+        $useCase = app(UpdateProductUseCase::class);
+
+        $product = $useCase->execute(
             $uuid,
             $request->getName(),
             $request->getDescription(),
@@ -38,32 +40,22 @@ class ProductController extends Controller
             $request->getPrice(),
         );
 
-        return response()->json([], 200);
+        return response()->json($product, 200);
     }
 
     public function getAllByCategory(string $categoryUuid)
     {
-        $products = $this->service->getAll($categoryUuid);
+        $useCase = app(AllProductsByCategoryUseCase::class);
+        $products = $useCase->execute($categoryUuid);
 
-        return response()->json(array_map(fn($product) => $this->parseProduct($product), $products), 200);
+        return response()->json($products);
     }
 
     public function delete(string $uuid)
     {
-        $this->service->delete($uuid);
+        $useCase = app(DeleteProductUseCase::class);
+        $useCase->execute($uuid);
 
         return response()->json([], 204);
-    }
-
-    private function parseProduct(Product $product)
-    {
-        return [
-            'uuid' => $product->getUuid()->getValue(),
-            'name' => $product->getName()->getValue(),
-            'description' => $product->getDescription(),
-            'image_uri' => $product->getImageUri(),
-            'category' => ['uuid' => $product->getCategory()->getUuid()->getValue(), 'name' => $product->getCategory()->getName()->getValue()],
-            'price' => $product->getPrice()->getValue(),
-        ];
     }
 }

@@ -1,44 +1,29 @@
 <?php
 
-namespace Core\Application\Services;
+namespace Core\Application\UseCases\Product;
 
+use Core\Application\Adapters\Dto\ProductDtoAdapter;
 use Core\Application\Contracts\Repositories\CategoryRepository;
 use Core\Application\Contracts\Repositories\ProductRepository;
-use Core\Application\Contracts\Services\ProductService as Contract;
+use Core\Application\Dtos\Product\ProductDto;
 use Core\Domain\Base\Helpers\DirtyValuesHelper;
 use Core\Domain\Entities\Product;
 
-class ProductService implements Contract
+class UpdateProductUseCase
 {
     public function __construct(
-        private ProductRepository $productRepository,
-        private CategoryRepository $categoryRepository
+        private readonly ProductRepository $productRepository,
+        private readonly CategoryRepository $categoryRepository
     ) {}
 
-    public function create(string $name, string $description, string $categoryUuid, string $imageUri, float $price): Product
-    {
-        $category = $this->categoryRepository->getByUuid($categoryUuid);
-
-        $product = Product::create($name, $description, $category, $imageUri, $price);
-
-        $this->productRepository->save($product);
-
-        return $product;
-    }
-
-    public function getByUuid(string $uuid): Product
-    {
-        return $this->productRepository->getByUuid($uuid);
-    }
-
-    public function update(
+    public function execute(
         string $productUuid,
         ?string $name = null,
         ?string $description = null,
         ?string $categoryUuid = null,
         ?string $imageUri = null,
-        ?float $price = null
-    ): void {
+        ?float $price = null,
+    ): ProductDto {
         $product = $this->productRepository->getByUuid($productUuid);
         $category = $product->getCategory();
         if (!is_null($categoryUuid)) {
@@ -55,19 +40,7 @@ class ProductService implements Contract
         );
 
         $this->productRepository->update($updatedProduct);
-    }
 
-    public function delete(string $uuid): void
-    {
-        $product = $this->productRepository->getByUuid($uuid);
-
-        $this->productRepository->delete($product);
-    }
-
-    public function getAll(?string $categoryUuid = null): array
-    {
-        $products = $this->productRepository->all($categoryUuid);
-
-        return $products;
+        return ProductDtoAdapter::parse($updatedProduct);
     }
 }
