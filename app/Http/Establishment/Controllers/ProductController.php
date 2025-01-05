@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Establishment\Requests\CreateProductRequest;
 use App\Http\Establishment\Requests\UpdateProductRequest;
 use Core\Application\Contracts\Services\ProductService;
+use Core\Application\UseCases\Product\AllProductsByCategoryUseCase;
 use Core\Application\UseCases\Product\CreateProductUseCase;
 use Core\Application\UseCases\Product\UpdateProductUseCase;
-use Core\Domain\Entities\Product;
 
 class ProductController extends Controller
 {
@@ -49,9 +49,10 @@ class ProductController extends Controller
 
     public function getAllByCategory(string $categoryUuid)
     {
-        $products = $this->service->getAll($categoryUuid);
+        $useCase = app(AllProductsByCategoryUseCase::class);
+        $products = $useCase->execute($categoryUuid);
 
-        return response()->json(array_map(fn($product) => $this->parseProduct($product), $products), 200);
+        return response()->json($products);
     }
 
     public function delete(string $uuid)
@@ -59,17 +60,5 @@ class ProductController extends Controller
         $this->service->delete($uuid);
 
         return response()->json([], 204);
-    }
-
-    private function parseProduct(Product $product)
-    {
-        return [
-            'uuid' => $product->getUuid()->getValue(),
-            'name' => $product->getName()->getValue(),
-            'description' => $product->getDescription(),
-            'image_uri' => $product->getImageUri(),
-            'category' => ['uuid' => $product->getCategory()->getUuid()->getValue(), 'name' => $product->getCategory()->getName()->getValue()],
-            'price' => $product->getPrice()->getValue(),
-        ];
     }
 }
