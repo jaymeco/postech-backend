@@ -4,6 +4,7 @@ namespace App\Http\Establishment\Controllers;
 
 use App\Http\Controllers\Controller;
 use Core\Application\Contracts\Services\OrderService;
+use Core\Application\UseCases\Order\FinishOrderUseCase;
 use Core\Application\UseCases\Order\SendOrderToPreparationUseCase;
 use Core\Application\UseCases\Order\UpdateOrderToReadyUseCase;
 
@@ -50,6 +51,15 @@ class OrderController extends Controller
     public function updateToReady(string $orderUuid)
     {
         $useCase = app(UpdateOrderToReadyUseCase::class);
+
+        $order = $useCase->execute($orderUuid);
+
+        return response()->json($order);
+    }
+
+    public function finish(string $orderUuid)
+    {
+        $useCase = app(FinishOrderUseCase::class);
 
         $order = $useCase->execute($orderUuid);
 
