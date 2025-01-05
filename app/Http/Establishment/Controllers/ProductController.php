@@ -8,6 +8,7 @@ use App\Http\Establishment\Requests\UpdateProductRequest;
 use Core\Application\Contracts\Services\ProductService;
 use Core\Application\UseCases\Product\AllProductsByCategoryUseCase;
 use Core\Application\UseCases\Product\CreateProductUseCase;
+use Core\Application\UseCases\Product\DeleteProductUseCase;
 use Core\Application\UseCases\Product\UpdateProductUseCase;
 
 class ProductController extends Controller
@@ -57,7 +58,8 @@ class ProductController extends Controller
 
     public function delete(string $uuid)
     {
-        $this->service->delete($uuid);
+        $useCase = app(DeleteProductUseCase::class);
+        $useCase->execute($uuid);
 
         return response()->json([], 204);
     }
