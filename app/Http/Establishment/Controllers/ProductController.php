@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Establishment\Requests\CreateProductRequest;
 use App\Http\Establishment\Requests\UpdateProductRequest;
 use Core\Application\Contracts\Services\ProductService;
+use Core\Application\UseCases\Product\CreateProductUseCase;
 use Core\Domain\Entities\Product;
 
 class ProductController extends Controller
@@ -16,7 +17,9 @@ class ProductController extends Controller
 
     public function create(CreateProductRequest $request)
     {
-        $product = $this->service->create(
+        $useCase = app(CreateProductUseCase::class);
+
+        $product = $useCase->execute(
             $request->getName(),
             $request->getDescription(),
             $request->getCategoryUuid(),
@@ -24,7 +27,7 @@ class ProductController extends Controller
             $request->getPrice(),
         );
 
-        return response()->json($this->parseProduct($product), 201);
+        return response()->json($product, 201);
     }
 
     public function update(string $uuid, UpdateProductRequest $request)
