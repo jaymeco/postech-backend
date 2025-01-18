@@ -1,0 +1,62 @@
+put:
+  tags:
+    - orders
+  summary: Finalizar pedido.
+  description: Atualiza o status do pedido para o status de "Finalizado".
+  parameters:
+    - in: path
+      name: orderUuid
+      schema:
+        type: string
+      required: true
+      description: Uuid do pedido
+  responses:
+    "200":
+      description: Pedido atualizado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: UUID de identificao de pedido criado
+              code:
+                type: string
+                description: Codigo do pedido gerado para identificacao para o cliente
+              status:
+                type: object
+                description: Status em que o pedido se encontra
+              ordered_at:
+                type: string
+                description: Data em que o pedido foi solicitado
+              price:
+                type: integer
+                description: Preco total do pedido, sendo um somatorio do preco dos produtos
+              products:
+                type: array
+                descripton: Lista de produtos que foram adicionados no pedido
+            example:
+              uuid: f17e929d-53b9-480c-bab0-12c5f49e637f
+              code: Misto Quente
+              status: {
+                "uuid": "971b321f-745a-4f20-8a10-1c4f7b8ff72d",
+                name: "Pedido finalizado"
+              }
+              price: 10
+              ordered_at: "2024-10-31T00:00:00.000000Z"
+              products: [
+                {
+                  "uuid": "68da5315-1f9c-4c82-910b-dc9e31b325fd",
+                  "name": "Misto quente",
+                  "description": "Um bom lanche",
+                  "image_uri": "https://imageplaceholder.net/600x400",
+                  "price": 10,
+                  "category": {
+                    "uuid": "4236e27e-6fbe-494d-8777-edf2161f9d7d",
+                    "name": "Lanche"
+                  }
+                }
+              ]
+    "404":
+      $ref: '../../base-doc.yaml#/components/responses/NotFound'
