@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postech-config
+data:
+  DB_CONNECTION: pgsql
+  DB_HOST: postech-db-service
+  DB_PORT: "5432"
+  APP_ENV: local
+  PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
