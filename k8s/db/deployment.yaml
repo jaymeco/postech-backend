@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postech-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postech-db-deployment
+  template: # Template é o pod que será replicado
+    metadata:
+      labels:
+        app: postech-db-deployment
+    spec:
+      containers:
+        - name: postech-db
+          image: postgres:17-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_NAME
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+            # - name: db-initial
+            #   mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: pgsql-pvc
+        # - name: db-initial
+        #   hostPath:
+        #     path: "../../db.conf"
