@@ -104,6 +104,15 @@ Utilizando os conceitos da arquitetura hexagonal, a aplicação foi construída 
 
 OBS.: Sobre a camada dos atores condutores, a definição das rota são feita na pasta `/routes` seguindo a estruturação do Laravel.
 
+## Arquitetura da Aplicação
+![Arquitetura da Aplicação](/assets/arch-API.png)
+
+## Integração com Mercado Pago
+![Arquitetura para a intergração](/assets/arch-MercadoPago.png)
+
+## Arquitetura Kubernetes
+![Arquitetura para a intergração](/assets/arch-K8S.png)
+
 # Requisitos da API
 Esta API possui funcionalidades que atendendem a solução da criação de autoatendimento de lanchonente.
 As rotas listadas abaixo contemplam os requisitos funcionais necesários para que a solução seja atendida.
