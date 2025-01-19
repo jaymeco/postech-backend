@@ -9,10 +9,14 @@ use Core\Domain\Entities\Order;
 
 class MakeCheckoutUseCase
 {
+    private readonly string $notifyUri;
+
     public function __construct(
         private readonly OrderRepository $orderRepository,
         private readonly PaymentService $paymentService,
-    ) {}
+    ) {
+        $this->notifyUri = env('APP_NOTIFICATION_URI', "http://localhost:8002/api/v1/webhooks");
+    }
 
     public function execute(string $orderUuid)
     {
@@ -23,6 +27,11 @@ class MakeCheckoutUseCase
         return $paymentData;
     }
 
+    private function getNotifyUrl(string $orderUuid)
+    {
+        return $this->notifyUri . "/orders/$orderUuid/process-payment";
+    }
+
     private function requestPayment(Order $order)
     {
         $orderUuid = $order->getUuid()->getValue();
@@ -30,7 +39,7 @@ class MakeCheckoutUseCase
         $paymentRequest = new PaymentRequest(
             $order->getUuid()->getValue(),
             $order->getPrice()->getValue(),
-            "http://localhost:8002/api/v1/webhooks/orders/$orderUuid/process-payment",
+            $this->getNotifyUrl($orderUuid),
         );
 
         return $this->paymentService->requestQrCode($paymentRequest);
