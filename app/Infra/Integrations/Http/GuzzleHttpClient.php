@@ -12,7 +12,7 @@ class GuzzleHttpClient implements HttpClient
     {
         if (is_null(self::$instance)) {
             return new Guzzle([
-                'base_uri' => 'http://localhost:8001'
+                'base_uri' => env('APP_INTEGRATION_URI', 'http://localhost:8001')
             ]);
         }
 
