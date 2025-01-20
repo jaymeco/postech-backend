@@ -8,3 +8,5 @@ data:
   DB_PORT: "5432"
   APP_ENV: local
   PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
+  APP_INTEGRATION_URI: "http://postech-service"
+  APP_NOTIFICATION_URI: "http://postech-service/api/v1/webhooks"
