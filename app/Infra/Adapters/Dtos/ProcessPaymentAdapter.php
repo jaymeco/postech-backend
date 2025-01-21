@@ -7,7 +7,7 @@ use Core\Application\Dtos\ProcessPaymentDto;
 abstract class ProcessPaymentAdapter
 {
     public static function parse(array $data) {
-        if(env('APP_ENV') == 'dev') {
+        if(env('APP_ENV') == 'local') {
             return new ProcessPaymentDto($data['paymentId']);
         }
 

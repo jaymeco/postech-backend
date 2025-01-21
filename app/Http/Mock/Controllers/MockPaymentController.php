@@ -13,7 +13,7 @@ class MockPaymentController extends Controller
     {
         $client = new \GuzzleHttp\Client();
         $client->post($request->getNotificationUrl(), [
-            'json' => ['data' => ['id' => 1]]
+            'json' => ['paymentId' => 1]
         ]);
 
 
