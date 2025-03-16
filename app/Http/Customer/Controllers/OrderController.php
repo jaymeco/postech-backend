@@ -4,17 +4,14 @@ namespace App\Http\Customer\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Customer\Requests\CreateOrderRequest;
-use Core\Application\Contracts\Services\OrderService;
+use Core\Application\UseCases\CheckPaymentUseCase;
 use Core\Application\UseCases\CreateOrderUseCase;
 use Core\Application\UseCases\MakeCheckoutUseCase;
+use Core\Application\UseCases\Order\GetOrderByUuidUseCase;
 use Core\Domain\Entities\Order;
 
 class OrderController extends Controller
 {
-    public function __construct(
-        private readonly OrderService $service,
-    ) {}
-
     public function create(CreateOrderRequest $request)
     {
         $useCase = app(CreateOrderUseCase::class);
@@ -24,24 +21,29 @@ class OrderController extends Controller
         return response()->json($this->parseOrder($order), 201);
     }
 
+    public function checkOrderPayment(string $orderUuid)
+    {
+        $useCase = app(CheckPaymentUseCase::class);
+        $data = $useCase->execute($orderUuid);
+
+        return response()->json($data);
+    }
+
     public function checkout(string $orderUuid)
     {
         $useCase = app(MakeCheckoutUseCase::class);
 
-        $useCase->execute($orderUuid);
+        $data = $useCase->execute($orderUuid);
 
-        return response()->json([], 204);
+        return response()->json($data);
     }
 
     public function getByUuid(string $orderUuid)
     {
-        $order = $this->service->getByUuid($orderUuid);
+        $useCase = app(GetOrderByUuidUseCase::class);
+        $order = $useCase->execute($orderUuid);
 
-        return response()
-            ->json(
-                $this->parseOrder($order),
-                200,
-            );
+        return response()->json($order, 200);
     }
 
     private function parseOrder(Order $order)

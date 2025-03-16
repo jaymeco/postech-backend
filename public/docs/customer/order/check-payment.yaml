@@ -1,0 +1,35 @@
+get:
+  tags:
+    - customers
+  summary: Consulta o status do pagamento do pedido.
+  description: Realiza a consulta do status do pagemento do pedido.
+  parameters:
+    - in: path
+      name: orderUuid
+      schema:
+        type: string
+      required: true
+      description: Uuid do pedido
+  responses:
+    "200":
+      description: Status do pedido consultado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: Status do pagamento
+              order_code:
+                type: string
+                description: Codigo do pedido gerado de identificacao para o cliente
+              payment_date:
+                type: string
+                description: Data em que o pedido foi pago
+            example:
+              code: "###f17e929d12c5f49e637f"
+              status: PAGAMENTO_APROVADO
+              payment_date: "2024-10-31T00:00:00.000000Z"
+    "404":
+      $ref: '../../base-doc.yaml#/components/responses/NotFound'
