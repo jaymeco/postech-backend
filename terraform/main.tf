@@ -22,3 +22,7 @@ resource "aws_db_instance" "mysql" {
   skip_final_snapshot = true
   publicly_accessible = true
 }
+
+output "rds_endpoint" {
+  value = aws_db_instance.mysql.endpoint
+}

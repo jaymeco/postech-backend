@@ -1,5 +1,9 @@
 variable "LabRole" {
-  default = "arn:aws:iam::055653651246:role/LabRole"
+  default = "arn:aws:iam::476809694749:role/LabRole"
+}
+
+variable "LabRoleName" {
+  default = "LabRole"
 }
 
 variable "Region" {
@@ -20,4 +24,12 @@ variable "DatabasePassaword" {
 
 variable "DatabasePort" {
   default = "3306"
+}
+
+variable "appImage" {
+  default = "476809694749.dkr.ecr.us-east-1.amazonaws.com/postech-backend:v3"
+}
+
+variable "eksRole" {
+  default = "arn:aws:iam::476809694749:role/EMR_EC2_DefaultRole"
 }
