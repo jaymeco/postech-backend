@@ -33,3 +33,7 @@ variable "appImage" {
 variable "eksRole" {
   default = "arn:aws:iam::476809694749:role/EMR_EC2_DefaultRole"
 }
+
+data "aws_ssm_parameter" "lambda_url" {
+  name = "auth-lambda-url"
+}
