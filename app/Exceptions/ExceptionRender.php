@@ -20,6 +20,7 @@ class ExceptionRender
         $renderer =  match ($exception::class) {
             RequestException::class => self::request($exception),
             ApplicationException::class => self::application($exception),
+            AuthException::class => self::auth($exception),
             default => self::unResolved($exception),
         };
 
@@ -44,6 +45,16 @@ class ExceptionRender
             $exception->getType(),
             $exception->getMessage(),
             HttpStatus::NOT_FOUND,
+            $exception->getDetails(),
+        );
+    }
+
+    private static function auth(AuthException $exception)
+    {
+        return new static(
+            $exception->getType(),
+            $exception->getMessage(),
+            HttpStatus::NOT_AUTHORIZED,
             $exception->getDetails(),
         );
     }
