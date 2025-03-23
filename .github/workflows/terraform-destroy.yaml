@@ -35,7 +35,7 @@ jobs:
           terraform_version: 0.15.5
 
       - name: Terraform Location
-        id: init
+        id: location
         run: pwd && ls -la
 
       - name: Terraform Init
