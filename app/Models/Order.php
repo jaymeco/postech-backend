@@ -23,6 +23,8 @@ class Order extends Model
     const DELETED_AT = 'deleted_at';
     const UPDATED_AT = 'updated_at';
 
+    const STATUS = 'status';
+
     protected $table = 'order';
 
     /**

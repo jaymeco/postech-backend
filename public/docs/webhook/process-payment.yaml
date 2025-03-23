@@ -1,0 +1,15 @@
+post:
+  tags:
+    - webhook
+  summary: Processar pagamento de pedido.
+  description: Realiza o processamento do pagamento de um pedido.
+  parameters:
+    - in: path
+      name: orderUuid
+      schema:
+        type: string
+      required: true
+      description: Uuid do pedido
+  responses:
+    "200":
+      description: OK

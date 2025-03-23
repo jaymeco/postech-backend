@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postech-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: postech-deployment
+  template: # Template é o pod que será replicado
+    metadata:
+      labels:
+        app: postech-deployment
+    spec:
+      containers:
+        - name: postech
+          image: jaymeco/postech-backend:v3
+          resources:
+            requests:
+              cpu: 1m
+          lifecycle:
+            postStart:
+              exec:
+                command: ['/bin/sh', '-c', 'php artisan migrate && php artisan db:seed']
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_CONNECTION
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: DB_CONNECTION
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: DB_PORT
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_PASSWORD
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: DB_NAME
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: APP_ENV
+            - name: APP_INTEGRATION_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: APP_INTEGRATION_URI
+            - name: APP_NOTIFICATION_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: APP_NOTIFICATION_URI

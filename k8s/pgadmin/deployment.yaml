@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin-deployment
+  template: # Template é o pod que será replicado
+    metadata:
+      labels:
+        app: pgadmin-deployment
+    spec:
+      containers:
+        - name: pgadmin
+          image: dpage/pgadmin4:8.14
+          ports:
+            - containerPort: 80
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: PGADMIN_DEFAULT_EMAIL
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postech-secret
+                  key: PGADMIN_DEFAULT_PASSWORD
+            - name: PGADMIN_CONFIG_WTF_CSRF_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: postech-config
+                  key: PGADMIN_CONFIG_WTF_CSRF_ENABLED

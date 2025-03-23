@@ -111,4 +111,31 @@ class Order
             $enum->name(),
         );
     }
+
+    public function setAsPreparing()
+    {
+        $enum = OrderStatusEnum::PREPARING;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
+
+    public function setAsReady()
+    {
+        $enum = OrderStatusEnum::READY;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
+
+    public function finish()
+    {
+        $enum = OrderStatusEnum::FINISHED;
+        $this->status = OrderStatus::restore(
+            $enum->key(),
+            $enum->name(),
+        );
+    }
 }

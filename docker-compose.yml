@@ -24,8 +24,13 @@ services:
             - DB_CONNECTION=pgsql
             - DB_DATABASE=pos_tech
             - APP_ENV=local
+            - APP_INTEGRATION_URI=http://172.24.0.5:8001
+            - APP_NOTIFICATION_URI=http://172.24.0.5:8002
+            - APP_AUTH_LAMBDA_URI=https://rxa442yotg.execute-api.us-east-1.amazonaws.com
         ports:
             - "8000:8000"
+            - "8001:8001"
+            - "8002:8002"
             - 9000
         volumes:
             - ./:/app
