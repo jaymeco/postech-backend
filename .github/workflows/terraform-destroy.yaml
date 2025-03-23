@@ -36,11 +36,11 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: cd ./terraform && terraform init
 
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: cd ./terraform && terraform validate -no-color
 
       - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+        run: cd ./terraform && terraform destroy -auto-approve
