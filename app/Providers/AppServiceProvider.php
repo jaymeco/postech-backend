@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Infra\Integrations\Http\GuzzleHttpClient;
 use App\Infra\Integrations\Http\HttpClient;
+use App\Infra\Integrations\LambdaAuthService;
 use App\Infra\Integrations\MockPaymentService;
 use App\Infra\Repositories\Eloquent\CategoryEloquentRepository;
 use App\Infra\Repositories\Eloquent\CustomerEloquentRepository;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         RepositoriesContracts\PaymentRepository::class => PaymentEloquentRepository::class,
 
         ServiceContracts\PaymentService::class => MockPaymentService::class,
+        ServiceContracts\AuthService::class => LambdaAuthService::class,
         HttpClient::class => GuzzleHttpClient::class,
     ];
     /**

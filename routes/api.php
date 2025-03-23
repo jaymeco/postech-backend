@@ -4,6 +4,7 @@ use App\Http\Customer\Controllers\CustomerController;
 use App\Http\Customer\Controllers\OrderController as CustomerOrderController;
 use App\Http\Establishment\Controllers\OrderController;
 use App\Http\Establishment\Controllers\ProductController;
+use App\Http\Middlewares\AuthorizarionMiddleware;
 use App\Http\Mock\Controllers\MockPaymentController;
 use App\Http\Webhook\Controllers\OrderController as WebhookOrderController;
 use Illuminate\Support\Facades\Route;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('customer')->group(function () {
     Route::post('/', [CustomerController::class, 'create']);
 
-    Route::prefix('orders')->group(function () {
+    Route::prefix('orders')->middleware([AuthorizarionMiddleware::class])->group(function () {
         Route::prefix('{orderUuid}')->group(function () {
             Route::get('/', [CustomerOrderController::class, 'getByUuid']);
             Route::get('/check-payment', [CustomerOrderController::class, 'checkOrderPayment']);

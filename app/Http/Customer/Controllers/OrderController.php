@@ -16,9 +16,9 @@ class OrderController extends Controller
     {
         $useCase = app(CreateOrderUseCase::class);
 
-        $order = $useCase->execute($request->getProducts(), $request->getCustomerCpf());
+        $output = $useCase->execute($request->getProducts(), $request->getCustomerCpf());
 
-        return response()->json($this->parseOrder($order), 201);
+        return response()->json($output, 201);
     }
 
     public function checkOrderPayment(string $orderUuid)
