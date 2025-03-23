@@ -11,5 +11,6 @@ resource "kubernetes_config_map" "app_config" {
     APP_ENV              = "local"
     APP_INTEGRATION_URI  = "postech-service.default.svc.cluster.local"
     APP_NOTIFICATION_URI = "postech-service.default.svc.cluster.local/v1/webhooks"
+    APP_AUTH_LAMBDA_URI = data.aws_ssm_parameter.lambda_url.value
   }
 }
