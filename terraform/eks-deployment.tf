@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "app_deployment" {
         container {
           image = var.appImage
           name  = "backend"
-          command = ["/bin/sh", "-c", "php artisan migrate --force && php artisan db:seed --force"]
+        #   command = ["/bin/sh", "-c", "php artisan migrate --force && php artisan db:seed --force"]
 
           env_from {
             config_map_ref {
