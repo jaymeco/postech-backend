@@ -1,6 +1,10 @@
 provider "aws" {
-  region                   = var.Region
-#   shared_credentials_files = ["/home/jaymeco/.aws/credentials"]
+  region = var.Region
+  #   shared_credentials_files = ["/home/jaymeco/.aws/credentials"]
+}
+
+terraform {
+  backend "s3" {}
 }
 
 resource "aws_db_subnet_group" "db-subnet" {
@@ -17,10 +21,10 @@ resource "aws_db_instance" "mysql" {
   engine_version         = "8.0"
   username               = var.DatabaseUserName
   password               = var.DatabasePassaword
-  db_subnet_group_name = aws_db_subnet_group.db-subnet.name
+  db_subnet_group_name   = aws_db_subnet_group.db-subnet.name
   vpc_security_group_ids = [aws_security_group.sg-database.id]
-  skip_final_snapshot = true
-  publicly_accessible = true
+  skip_final_snapshot    = true
+  publicly_accessible    = true
 }
 
 output "rds_endpoint" {
