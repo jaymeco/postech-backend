@@ -6,7 +6,7 @@ resource "kubernetes_config_map" "app_config" {
 
   data = {
     DB_CONNECTION        = "mysql"
-    DB_HOST              = aws_db_instance.mysql.endpoint
+    DB_HOST              = aws_db_instance.mysql.address
     DB_PORT              = var.DatabasePort
     APP_ENV              = "local"
     APP_INTEGRATION_URI  = "postech-service.default.svc.cluster.local"
