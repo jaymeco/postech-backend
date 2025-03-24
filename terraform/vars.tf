@@ -27,7 +27,7 @@ variable "DatabasePort" {
 }
 
 variable "appImage" {
-  default = "476809694749.dkr.ecr.us-east-1.amazonaws.com/postech-backend:v4"
+  default = "476809694749.dkr.ecr.us-east-1.amazonaws.com/postech-backend:v5.1"
 }
 
 variable "eksRole" {
