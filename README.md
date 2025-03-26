@@ -218,6 +218,8 @@ Para que a execução ocorrem com sucesso, é necessário criar um S3 bucket na 
 postech-app-state
 ```
 
+OBS.: Lembre-se de adicionar as credenciais de acesso na aws para a execução!
+
 ## Comandos para a excução do terraform
 
 ### Inicialização do backend
