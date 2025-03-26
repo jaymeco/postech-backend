@@ -2,6 +2,8 @@
 
 Esta aplicação foi desenvolvida utilizando a arquitetura hexagonal e alguns método do DDD. Nas seções abaixo terão as explicações quais camadas o projeto possui, junto com a explicação da organização física dos arquivos e o que a aplicação necessita para ser utilizada
 
+OBS.: Documentação para a execução do terraform encontra-se no final do arquivo.
+
 ## Rodando o projeto
 O projeto possui arquivos de configuração docker (dockerfile e docker-compose) para rodar em ambientes de desenvolvimento.
 
@@ -205,3 +207,33 @@ até a cozinha do estabelecimento
 #### Consultar status do pagamento pedido:
 Funcionalidade que permite o cliente consulte o status do pagamento pedido para saber se o pagamento foi aprovado ou não.
 **Rota GET /api/customer/orders/:orderUuid/check-payment**
+
+# Execução do Terraform
+
+Dentro do diretorio /terraform, existe os arquivos de execução do terraform. Os arquivos terraform provisionam todo ambiente para a AWS.
+
+Para que a execução ocorrem com sucesso, é necessário criar um S3 bucket na AWS com o seguinte nome:
+
+```
+postech-app-state
+```
+
+## Comandos para a excução do terraform
+
+### Inicialização do backend
+
+```
+terraform init -backend=true -backend-config="config/backend.hcl"
+```
+
+### Validação dos arquivos terraform
+
+```
+terraform validate
+```
+
+### Aplicação das configurações
+
+```
+terraform apply -auto-approve
+```
