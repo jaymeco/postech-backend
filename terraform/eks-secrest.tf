@@ -5,7 +5,7 @@ resource "kubernetes_secret" "app_secret" {
 
   data = {
     DB_PASSWORD = var.DatabasePassaword
-    DB_USER     = var.DatabaseUserName
-    DB_NAME     = var.DatabaseName
+    DB_USERNAME = var.DatabaseUserName
+    DB_DATABASE = var.DatabaseName
   }
 }

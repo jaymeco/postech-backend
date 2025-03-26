@@ -1,9 +1,7 @@
 name: Terraform AWS com EKS
 
 on:
-  push:
-    branches:
-      - 'master'
+  workflow_dispatch:
 
 
 env:
@@ -13,6 +11,7 @@ env:
 
 jobs:
   apply-dev:
+    if: github.ref == 'refs/heads/master'
     name: 'terraform apply dev'
     runs-on: ubuntu-latest
     env:
@@ -34,7 +33,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend=true -backend-config="config/backend.hcl"
 
       - name: Terraform Validate
         id: validate
